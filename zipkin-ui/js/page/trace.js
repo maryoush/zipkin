@@ -37,7 +37,7 @@ const TracePageComponent = component(function TracePage() {
         e.preventDefault();
         this.trigger('uiRequestJsonPanel', {title: `Trace ${this.attr.traceId}`,
                                             obj: data.trace,
-                                            link: `/api/v1/trace/${this.attr.traceId}`});
+                                            link: `api/v1/trace/${this.attr.traceId}`});
       });
 
       $('.annotation:not(.core)').tooltip({placement: 'left'});
