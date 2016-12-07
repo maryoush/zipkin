@@ -14,7 +14,7 @@ export default component(function TraceData() {
   this.after('initialize', function() {
     const traceId = this.attr.traceId;
     const logsUrl = toContextualLogsUrl(this.attr.logsUrl, traceId);
-    $.ajax(`api/v1/trace/${traceId}`, {
+    $.ajax(`/api/v1/trace/${traceId}`, {
       type: 'GET',
 
       beforeSend(xhr) {
@@ -34,10 +34,14 @@ export default component(function TraceData() {
 
 
   $(window).on('message', e => {
-    if (typeof e.originalEvent.data === 'string' && typeof(Storage) !== 'undefined') {
+    const orgEvent = e.originalEvent;
+    const p = '(http).+(.yaas.io)';
+    if (typeof orgEvent.data === 'string' && orgEvent.origin.match(p) !== null) {
       //  console.log('--- r default '+e.originalEvent.data+' '+e.originalEvent.origin);
-      const data = e.originalEvent.data;
-      localStorage.setItem('hybris-tenant', data);
+      if (typeof(Storage) !== 'undefined') {
+        const data = e.originalEvent.data;
+        localStorage.setItem('hybris-tenant', data);
+      }
       //  console.log('--- after received default'+localStorage.getItem("hybris-tenant"));
     }
   });

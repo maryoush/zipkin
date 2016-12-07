@@ -21,7 +21,7 @@ export default component(function DefaultData() {
     const query = convertToApiQuery(window.location.search);
     const serviceName = query.serviceName;
     if (serviceName) {
-      $.ajax(`api/v1/traces?${queryString.stringify(query)}`, {
+      $.ajax(`/api/v1/traces?${queryString.stringify(query)}`, {
         type: 'GET',
         beforeSend(xhr) {
           //    console.log('--- before send default'+ localStorage.getItem("hybris-tenant"));
@@ -45,10 +45,14 @@ export default component(function DefaultData() {
 
 
   $(window).on('message', e => {
-    if (typeof e.originalEvent.data === 'string' && typeof(Storage) !== 'undefined') {
+    const orgEvent = e.originalEvent;
+    const p = '(http).+(.yaas.io)';
+    if (typeof orgEvent.data === 'string' && orgEvent.origin.match(p) !== null) {
       //  console.log('--- r default '+e.originalEvent.data+' '+e.originalEvent.origin);
-      const data = e.originalEvent.data;
-      localStorage.setItem('hybris-tenant', data);
+      if (typeof(Storage) !== 'undefined') {
+        const data = e.originalEvent.data;
+        localStorage.setItem('hybris-tenant', data);
+      }
       //  console.log('--- after received default'+localStorage.getItem("hybris-tenant"));
     }
   });
